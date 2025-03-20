@@ -84,6 +84,55 @@ public struct NeumorphicSrcBar: View {
     }
 }
 
+public struct NeumorphicSearchBar: View {
+    @Binding var text: String
+    var placeholder: String
+    var cornerRadius: CGFloat
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    public init(text: Binding<String>, placeholder: String, cornerRadius: CGFloat) {
+        self._text = text
+        self.placeholder = placeholder
+        self.cornerRadius = cornerRadius
+    }
+    
+    public var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(colorScheme == .dark ? Color.black : Color.white)
+                .shadow(color: colorScheme == .dark ? Color.black.opacity(0.6) : Color.gray.opacity(0.3), radius: 10, x: 5, y: 5)
+                .shadow(color: colorScheme == .dark ? Color.white.opacity(0.1) : Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                    .padding(.leading, 10)
+
+                TextField(placeholder, text: $text)
+                    .padding(10)
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                    .background(Color.clear)
+                    .cornerRadius(cornerRadius)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+
+                if !text.isEmpty {
+                    Button(action: {
+                        text = ""
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                            .padding(.trailing, 10)
+                    }
+                }
+            }
+            .padding(.horizontal, 10)
+        }
+        .frame(height: 50)
+    }
+}
+
 @available(iOS 16.0, *)
 public struct NeumorphicToggle: View {
     @Binding private var isOn: Bool
@@ -587,7 +636,7 @@ public struct Aquaporin<T: TabItem>: View {
                     color: configuration.shadowColor,
                     radius: configuration.shadowRadius,
                     x: 0,
-                    y: -5
+                    y: -2
                 )
                 .blur(radius: configuration.blurRadius)
                 .padding(.top, 5)
@@ -671,14 +720,14 @@ public struct TabShape: Shape {
             
             path.move(to: .init(x: midpoint - 60, y: 0))
             
-            let to = CGPoint(x: midpoint, y: -25)
+            let to = CGPoint(x: midpoint, y: -20)
             let control1 = CGPoint(x: midpoint - 25, y: 0)
-            let control2 = CGPoint(x: midpoint - 25, y: -25)
+            let control2 = CGPoint(x: midpoint - 25, y: -20)
             
             path.addCurve(to: to, control1: control1, control2: control2)
             
             let to1 = CGPoint(x: midpoint + 60, y: 0)
-            let control3 = CGPoint(x: midpoint + 25, y: -25)
+            let control3 = CGPoint(x: midpoint + 25, y: -20)
             let control4 = CGPoint(x: midpoint + 25, y: 0)
             
             path.addCurve(to: to1, control1: control3, control2: control4)
